@@ -1,0 +1,20 @@
+# Build output
+main.js
+
+# Dependencies
+node_modules/
+
+# IDE
+.idea/
+*.iml
+.vscode/
+
+# OS
+.DS_Store
+Thumbs.db
+
+# npm
+npm-debug.log*
+
+# obsidian
+data.json

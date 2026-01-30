@@ -1,0 +1,391 @@
+/* Blog Activity Tracker Styles */
+
+.blog-activity-container {
+	padding: 20px;
+	max-width: 100%;
+	overflow-x: auto;
+}
+
+/* Header */
+.blog-activity-header {
+	display: flex;
+	justify-content: space-between;
+	align-items: center;
+	margin-bottom: 20px;
+}
+
+.blog-activity-header h2 {
+	margin: 0;
+	font-size: 1.5em;
+	font-weight: 600;
+}
+
+.blog-activity-refresh-btn {
+	padding: 6px 12px;
+	border-radius: 6px;
+	border: 1px solid var(--background-modifier-border);
+	background: var(--background-secondary);
+	color: var(--text-normal);
+	cursor: pointer;
+	font-size: 0.85em;
+	transition: background 0.2s ease;
+}
+
+.blog-activity-refresh-btn:hover {
+	background: var(--background-modifier-hover);
+}
+
+/* View Toggle */
+.blog-activity-toggle {
+	display: flex;
+	gap: 4px;
+	margin-bottom: 20px;
+	background: var(--background-secondary);
+	border-radius: 8px;
+	padding: 4px;
+	width: fit-content;
+}
+
+.blog-activity-toggle .toggle-btn {
+	padding: 8px 16px;
+	border: none;
+	background: transparent;
+	color: var(--text-muted);
+	cursor: pointer;
+	border-radius: 6px;
+	font-size: 0.9em;
+	font-weight: 500;
+	transition: all 0.2s ease;
+}
+
+.blog-activity-toggle .toggle-btn:hover {
+	color: var(--text-normal);
+	background: var(--background-modifier-hover);
+}
+
+.blog-activity-toggle .toggle-btn.active {
+	background: var(--interactive-accent);
+	color: var(--text-on-accent);
+}
+
+/* Stats */
+.blog-activity-stats {
+	display: flex;
+	gap: 24px;
+	margin-bottom: 24px;
+	flex-wrap: wrap;
+}
+
+.blog-activity-stats .stat {
+	display: flex;
+	flex-direction: column;
+	padding: 12px 16px;
+	background: var(--background-secondary);
+	border-radius: 8px;
+	min-width: 100px;
+}
+
+.blog-activity-stats .stat-value {
+	font-size: 1.8em;
+	font-weight: 700;
+	color: var(--text-normal);
+	line-height: 1.2;
+}
+
+.blog-activity-stats .stat-label {
+	font-size: 0.8em;
+	color: var(--text-muted);
+	margin-top: 4px;
+}
+
+/* Heatmap Container */
+.blog-activity-heatmap-container {
+	margin-bottom: 24px;
+	overflow-x: auto;
+	padding-bottom: 10px;
+}
+
+.heatmap {
+	display: flex;
+	flex-direction: column;
+	gap: 4px;
+	min-width: fit-content;
+}
+
+/* Month Labels */
+.month-labels {
+	display: flex;
+	padding-left: 32px;
+	margin-bottom: 4px;
+}
+
+.month-label {
+	font-size: 0.75em;
+	color: var(--text-muted);
+	text-align: left;
+	padding-left: 4px;
+}
+
+.day-label-spacer {
+	width: 0;
+}
+
+/* Day Labels */
+.day-labels {
+	position: absolute;
+	display: flex;
+	flex-direction: column;
+	gap: 1px;
+	padding-right: 8px;
+}
+
+.day-label {
+	font-size: 0.7em;
+	color: var(--text-muted);
+	height: 13px;
+	line-height: 13px;
+	text-align: right;
+	width: 28px;
+}
+
+/* Heatmap Grid */
+.heatmap-grid {
+	display: grid;
+	grid-template-rows: repeat(7, 1fr);
+	grid-auto-flow: column;
+	gap: 3px;
+	margin-left: 32px;
+}
+
+.heatmap-cell {
+	width: 13px;
+	height: 13px;
+	border-radius: 2px;
+	transition: transform 0.1s ease;
+}
+
+.heatmap-cell.clickable {
+	cursor: pointer;
+}
+
+.heatmap-cell.clickable:hover {
+	transform: scale(1.2);
+	outline: 2px solid var(--text-muted);
+	outline-offset: 1px;
+}
+
+.heatmap-cell.outside-range {
+	visibility: hidden;
+}
+
+/* Activity Levels - Light Theme (GitHub-style) */
+.heatmap-cell.level-0 {
+	background-color: var(--background-secondary);
+	border: 1px solid var(--background-modifier-border);
+}
+
+.heatmap-cell.level-1 {
+	background-color: #9be9a8;
+}
+
+.heatmap-cell.level-2 {
+	background-color: #40c463;
+}
+
+.heatmap-cell.level-3 {
+	background-color: #30a14e;
+}
+
+.heatmap-cell.level-4 {
+	background-color: #216e39;
+}
+
+/* Dark Theme Adjustments */
+.theme-dark .heatmap-cell.level-0 {
+	background-color: var(--background-secondary);
+	border: 1px solid var(--background-modifier-border);
+}
+
+.theme-dark .heatmap-cell.level-1 {
+	background-color: #0e4429;
+}
+
+.theme-dark .heatmap-cell.level-2 {
+	background-color: #006d32;
+}
+
+.theme-dark .heatmap-cell.level-3 {
+	background-color: #26a641;
+}
+
+.theme-dark .heatmap-cell.level-4 {
+	background-color: #39d353;
+}
+
+/* Legend */
+.blog-activity-legend {
+	display: flex;
+	align-items: center;
+	gap: 4px;
+	font-size: 0.75em;
+	color: var(--text-muted);
+	margin-bottom: 24px;
+	justify-content: flex-end;
+}
+
+.legend-cell {
+	width: 13px;
+	height: 13px;
+	border-radius: 2px;
+}
+
+.legend-cell.level-0 {
+	background-color: var(--background-secondary);
+	border: 1px solid var(--background-modifier-border);
+}
+
+.legend-cell.level-1 {
+	background-color: #9be9a8;
+}
+
+.legend-cell.level-2 {
+	background-color: #40c463;
+}
+
+.legend-cell.level-3 {
+	background-color: #30a14e;
+}
+
+.legend-cell.level-4 {
+	background-color: #216e39;
+}
+
+.theme-dark .legend-cell.level-0 {
+	background-color: var(--background-secondary);
+	border: 1px solid var(--background-modifier-border);
+}
+
+.theme-dark .legend-cell.level-1 {
+	background-color: #0e4429;
+}
+
+.theme-dark .legend-cell.level-2 {
+	background-color: #006d32;
+}
+
+.theme-dark .legend-cell.level-3 {
+	background-color: #26a641;
+}
+
+.theme-dark .legend-cell.level-4 {
+	background-color: #39d353;
+}
+
+/* Recent Posts */
+.blog-activity-recent {
+	margin-top: 24px;
+}
+
+.blog-activity-recent h3 {
+	font-size: 1.1em;
+	font-weight: 600;
+	margin-bottom: 12px;
+	color: var(--text-normal);
+}
+
+.no-posts-message {
+	color: var(--text-muted);
+	font-style: italic;
+}
+
+.recent-posts-list {
+	list-style: none;
+	padding: 0;
+	margin: 0;
+}
+
+.recent-post-item {
+	padding: 12px;
+	margin-bottom: 8px;
+	background: var(--background-secondary);
+	border-radius: 8px;
+	border: 1px solid var(--background-modifier-border);
+	transition: border-color 0.2s ease;
+}
+
+.recent-post-item:hover {
+	border-color: var(--text-muted);
+}
+
+.recent-post-item .post-title {
+	display: block;
+	font-weight: 500;
+	color: var(--text-normal);
+	text-decoration: none;
+	margin-bottom: 4px;
+}
+
+.recent-post-item .post-title:hover {
+	color: var(--interactive-accent);
+}
+
+.recent-post-item .post-meta {
+	font-size: 0.85em;
+	color: var(--text-muted);
+}
+
+.recent-post-item .post-feed {
+	font-weight: 500;
+}
+
+/* Settings Styles */
+.feed-setting-container {
+	border: 1px solid var(--background-modifier-border);
+	border-radius: 8px;
+	margin-bottom: 12px;
+	padding: 8px;
+	background: var(--background-secondary);
+}
+
+.feed-help {
+	font-size: 0.85em;
+	color: var(--text-muted);
+	margin-bottom: 16px;
+	padding-left: 20px;
+}
+
+.feed-help li {
+	margin-bottom: 4px;
+	font-family: var(--font-monospace);
+}
+
+/* Tooltip (using native title attribute) */
+.heatmap-cell[title] {
+	position: relative;
+}
+
+/* Responsive adjustments */
+@media (max-width: 600px) {
+	.blog-activity-stats {
+		gap: 12px;
+	}
+
+	.blog-activity-stats .stat {
+		min-width: 80px;
+		padding: 8px 12px;
+	}
+
+	.blog-activity-stats .stat-value {
+		font-size: 1.4em;
+	}
+
+	.heatmap-cell {
+		width: 10px;
+		height: 10px;
+	}
+
+	.legend-cell {
+		width: 10px;
+		height: 10px;
+	}
+}

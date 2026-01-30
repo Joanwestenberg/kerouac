@@ -1,0 +1,11 @@
+{
+	"id": "blog-activity-tracker",
+	"name": "Blog Activity Tracker",
+	"version": "1.0.0",
+	"minAppVersion": "0.15.0",
+	"description": "Track your blog publishing activity from Substack, Medium, and Ghost via RSS with a GitHub-style activity heatmap.",
+	"author": "kerouac",
+	"authorUrl": "https://github.com/kerouac",
+	"fundingUrl": "",
+	"isDesktopOnly": false
+}
