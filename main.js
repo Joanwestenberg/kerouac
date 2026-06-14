@@ -32,7 +32,8 @@ var DEFAULT_SETTINGS = {
   feeds: [],
   activityData: {},
   lastFetched: null,
-  defaultView: "yearly"
+  defaultView: "yearly",
+  colorTheme: "auto"
 };
 var VIEW_TYPE_BLOG_ACTIVITY = "blog-activity-view";
 var RSSParser = class {
@@ -127,6 +128,12 @@ var BlogActivityView = class extends import_obsidian.ItemView {
     const container = this.containerEl.children[1];
     container.empty();
     container.addClass("blog-activity-container");
+    container.removeClass(
+      "blog-activity-theme-auto",
+      "blog-activity-theme-light",
+      "blog-activity-theme-dark"
+    );
+    container.addClass(`blog-activity-theme-${this.plugin.settings.colorTheme}`);
     const header = container.createDiv({ cls: "blog-activity-header" });
     header.createEl("h2", { text: "Blog Activity" });
     const refreshBtn = header.createEl("button", {
@@ -376,6 +383,15 @@ var BlogActivitySettingTab = class extends import_obsidian.PluginSettingTab {
         await this.plugin.saveSettings();
       })
     );
+    new import_obsidian.Setting(containerEl).setName("Color theme").setDesc(
+      "Choose how the activity view is colored. Auto follows your Obsidian theme; Light and Dark force that appearance regardless of your theme."
+    ).addDropdown(
+      (dropdown) => dropdown.addOption("auto", "Auto (match Obsidian)").addOption("light", "Light").addOption("dark", "Dark").setValue(this.plugin.settings.colorTheme).onChange(async (value) => {
+        this.plugin.settings.colorTheme = value;
+        await this.plugin.saveSettings();
+        this.plugin.refreshOpenViews();
+      })
+    );
     containerEl.createEl("h3", { text: "RSS Feeds" });
     containerEl.createEl("p", {
       text: "Add your blog RSS feeds below. Common feed URLs:",
@@ -561,6 +577,9 @@ var BlogActivityPlugin = class extends import_obsidian.Plugin {
     }
     this.settings.lastFetched = (0, import_obsidian.moment)().toISOString();
     await this.saveSettings();
+    await this.refreshOpenViews();
+  }
+  async refreshOpenViews() {
     const leaves = this.app.workspace.getLeavesOfType(VIEW_TYPE_BLOG_ACTIVITY);
     for (const leaf of leaves) {
       const view = leaf.view;

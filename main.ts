@@ -35,11 +35,14 @@ interface ActivityData {
 	[date: string]: BlogPost[];
 }
 
+type ColorTheme = "auto" | "light" | "dark";
+
 interface BlogActivitySettings {
 	feeds: BlogFeed[];
 	activityData: ActivityData;
 	lastFetched: string | null;
 	defaultView: "weekly" | "monthly" | "yearly";
+	colorTheme: ColorTheme;
 }
 
 const DEFAULT_SETTINGS: BlogActivitySettings = {
@@ -47,6 +50,7 @@ const DEFAULT_SETTINGS: BlogActivitySettings = {
 	activityData: {},
 	lastFetched: null,
 	defaultView: "yearly",
+	colorTheme: "auto",
 };
 
 // ============================================
@@ -184,6 +188,14 @@ class BlogActivityView extends ItemView {
 		const container = this.containerEl.children[1];
 		container.empty();
 		container.addClass("blog-activity-container");
+
+		// Apply the optional color theme (auto follows Obsidian, light/dark force it)
+		container.removeClass(
+			"blog-activity-theme-auto",
+			"blog-activity-theme-light",
+			"blog-activity-theme-dark"
+		);
+		container.addClass(`blog-activity-theme-${this.plugin.settings.colorTheme}`);
 
 		// Header
 		const header = container.createDiv({ cls: "blog-activity-header" });
@@ -527,6 +539,25 @@ class BlogActivitySettingTab extends PluginSettingTab {
 					})
 			);
 
+		// Color theme setting (optional light mode)
+		new Setting(containerEl)
+			.setName("Color theme")
+			.setDesc(
+				"Choose how the activity view is colored. Auto follows your Obsidian theme; Light and Dark force that appearance regardless of your theme."
+			)
+			.addDropdown((dropdown) =>
+				dropdown
+					.addOption("auto", "Auto (match Obsidian)")
+					.addOption("light", "Light")
+					.addOption("dark", "Dark")
+					.setValue(this.plugin.settings.colorTheme)
+					.onChange(async (value) => {
+						this.plugin.settings.colorTheme = value as ColorTheme;
+						await this.plugin.saveSettings();
+						this.plugin.refreshOpenViews();
+					})
+			);
+
 		// RSS Feeds section
 		containerEl.createEl("h3", { text: "RSS Feeds" });
 
@@ -820,6 +851,10 @@ export default class BlogActivityPlugin extends Plugin {
 		await this.saveSettings();
 
 		// Refresh view if open
+		await this.refreshOpenViews();
+	}
+
+	async refreshOpenViews(): Promise<void> {
 		const leaves = this.app.workspace.getLeavesOfType(VIEW_TYPE_BLOG_ACTIVITY);
 		for (const leaf of leaves) {
 			const view = leaf.view as BlogActivityView;
