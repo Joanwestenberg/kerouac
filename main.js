@@ -136,7 +136,19 @@ var BlogActivityView = class extends import_obsidian.ItemView {
     container.addClass(`blog-activity-theme-${this.plugin.settings.colorTheme}`);
     const header = container.createDiv({ cls: "blog-activity-header" });
     header.createEl("h2", { text: "Blog Activity" });
-    const refreshBtn = header.createEl("button", {
+    const headerActions = header.createDiv({ cls: "blog-activity-header-actions" });
+    const themeBtn = headerActions.createEl("button", {
+      cls: "blog-activity-theme-btn"
+    });
+    this.updateThemeButton(themeBtn);
+    themeBtn.addEventListener("click", async () => {
+      const order = ["auto", "light", "dark"];
+      const next = order[(order.indexOf(this.plugin.settings.colorTheme) + 1) % order.length];
+      this.plugin.settings.colorTheme = next;
+      await this.plugin.saveSettings();
+      await this.render();
+    });
+    const refreshBtn = headerActions.createEl("button", {
       cls: "blog-activity-refresh-btn",
       text: "Refresh"
     });
@@ -174,6 +186,17 @@ var BlogActivityView = class extends import_obsidian.ItemView {
     recentContainer.createEl("h3", { text: "Recent Posts" });
     this.renderRecentPosts(recentContainer);
   }
+  updateThemeButton(btn) {
+    const labels = {
+      auto: "\u25D1 Auto",
+      light: "\u2600 Light",
+      dark: "\u263E Dark"
+    };
+    const theme = this.plugin.settings.colorTheme;
+    btn.textContent = labels[theme];
+    btn.setAttribute("aria-label", `Color theme: ${theme}. Click to change.`);
+    btn.setAttribute("title", `Color theme: ${theme}. Click to change.`);
+  }
   renderHeatmap(container) {
     const heatmap = container.createDiv({ cls: "heatmap" });
     const { startDate, endDate, weeks } = this.getDateRange();
@@ -196,7 +219,7 @@ var BlogActivityView = class extends import_obsidian.ItemView {
       }
     });
     const grid = heatmap.createDiv({ cls: "heatmap-grid" });
-    grid.style.gridTemplateColumns = `repeat(${weeks}, 1fr)`;
+    grid.style.gridTemplateColumns = `repeat(${weeks}, var(--cell-size))`;
     const current = (0, import_obsidian.moment)(startDate).startOf("week");
     const end = (0, import_obsidian.moment)(endDate).endOf("week");
     while (current.isSameOrBefore(end)) {
@@ -222,6 +245,9 @@ var BlogActivityView = class extends import_obsidian.ItemView {
       }
       current.add(1, "day");
     }
+    requestAnimationFrame(() => {
+      container.scrollLeft = container.scrollWidth;
+    });
   }
   getDateRange() {
     const endDate = (0, import_obsidian.moment)().endOf("day");

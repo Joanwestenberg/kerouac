@@ -201,8 +201,23 @@ class BlogActivityView extends ItemView {
 		const header = container.createDiv({ cls: "blog-activity-header" });
 		header.createEl("h2", { text: "Blog Activity" });
 
+		const headerActions = header.createDiv({ cls: "blog-activity-header-actions" });
+
+		// Light / dark mode toggle (cycles Auto -> Light -> Dark)
+		const themeBtn = headerActions.createEl("button", {
+			cls: "blog-activity-theme-btn",
+		});
+		this.updateThemeButton(themeBtn);
+		themeBtn.addEventListener("click", async () => {
+			const order: ColorTheme[] = ["auto", "light", "dark"];
+			const next = order[(order.indexOf(this.plugin.settings.colorTheme) + 1) % order.length];
+			this.plugin.settings.colorTheme = next;
+			await this.plugin.saveSettings();
+			await this.render();
+		});
+
 		// Refresh button
-		const refreshBtn = header.createEl("button", {
+		const refreshBtn = headerActions.createEl("button", {
 			cls: "blog-activity-refresh-btn",
 			text: "Refresh",
 		});
@@ -252,6 +267,18 @@ class BlogActivityView extends ItemView {
 		this.renderRecentPosts(recentContainer);
 	}
 
+	private updateThemeButton(btn: HTMLElement): void {
+		const labels: Record<ColorTheme, string> = {
+			auto: "◑ Auto",
+			light: "☀ Light",
+			dark: "☾ Dark",
+		};
+		const theme = this.plugin.settings.colorTheme;
+		btn.textContent = labels[theme];
+		btn.setAttribute("aria-label", `Color theme: ${theme}. Click to change.`);
+		btn.setAttribute("title", `Color theme: ${theme}. Click to change.`);
+	}
+
 	private renderHeatmap(container: HTMLElement): void {
 		const heatmap = container.createDiv({ cls: "heatmap" });
 
@@ -279,9 +306,11 @@ class BlogActivityView extends ItemView {
 			}
 		});
 
-		// Grid
+		// Grid. Use a fixed per-cell column width (via the --cell-size CSS
+		// variable) instead of 1fr so the columns never collapse on narrow
+		// mobile screens, which previously squashed the cells out of view.
 		const grid = heatmap.createDiv({ cls: "heatmap-grid" });
-		grid.style.gridTemplateColumns = `repeat(${weeks}, 1fr)`;
+		grid.style.gridTemplateColumns = `repeat(${weeks}, var(--cell-size))`;
 
 		// Create cells for each day
 		const current = moment(startDate).startOf("week");
@@ -321,6 +350,13 @@ class BlogActivityView extends ItemView {
 
 			current.add(1, "day");
 		}
+
+		// The most recent weeks sit on the right edge of the graph. On narrow
+		// (mobile) screens the graph overflows horizontally, so scroll to the
+		// end after layout to make the latest posts visible by default.
+		requestAnimationFrame(() => {
+			container.scrollLeft = container.scrollWidth;
+		});
 	}
 
 	private getDateRange(): { startDate: moment.Moment; endDate: moment.Moment; weeks: number } {
