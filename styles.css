@@ -364,6 +364,94 @@
 	position: relative;
 }
 
+/* ============================================
+   Optional Color Themes (forced light / dark)
+   ============================================
+   "auto" relies on Obsidian's own theme variables and the .theme-dark
+   rules above. "light" and "dark" override the relevant variables and the
+   heatmap colors so the view keeps that appearance regardless of the
+   active Obsidian theme. */
+
+.blog-activity-theme-light {
+	--background-primary: #ffffff;
+	--background-secondary: #f6f8fa;
+	--background-modifier-border: #d0d7de;
+	--background-modifier-hover: #eaeef2;
+	--text-normal: #1f2328;
+	--text-muted: #59636e;
+	--text-on-accent: #ffffff;
+	--interactive-accent: #0969da;
+	background-color: var(--background-primary);
+	color: var(--text-normal);
+}
+
+.blog-activity-theme-dark {
+	--background-primary: #0d1117;
+	--background-secondary: #161b22;
+	--background-modifier-border: #30363d;
+	--background-modifier-hover: #21262d;
+	--text-normal: #e6edf3;
+	--text-muted: #848d97;
+	--text-on-accent: #ffffff;
+	--interactive-accent: #1f6feb;
+	background-color: var(--background-primary);
+	color: var(--text-normal);
+}
+
+/* Forced light heatmap + legend colors */
+.blog-activity-theme-light .heatmap-cell.level-0,
+.blog-activity-theme-light .legend-cell.level-0 {
+	background-color: var(--background-secondary);
+	border: 1px solid var(--background-modifier-border);
+}
+
+.blog-activity-theme-light .heatmap-cell.level-1,
+.blog-activity-theme-light .legend-cell.level-1 {
+	background-color: #9be9a8;
+}
+
+.blog-activity-theme-light .heatmap-cell.level-2,
+.blog-activity-theme-light .legend-cell.level-2 {
+	background-color: #40c463;
+}
+
+.blog-activity-theme-light .heatmap-cell.level-3,
+.blog-activity-theme-light .legend-cell.level-3 {
+	background-color: #30a14e;
+}
+
+.blog-activity-theme-light .heatmap-cell.level-4,
+.blog-activity-theme-light .legend-cell.level-4 {
+	background-color: #216e39;
+}
+
+/* Forced dark heatmap + legend colors */
+.blog-activity-theme-dark .heatmap-cell.level-0,
+.blog-activity-theme-dark .legend-cell.level-0 {
+	background-color: var(--background-secondary);
+	border: 1px solid var(--background-modifier-border);
+}
+
+.blog-activity-theme-dark .heatmap-cell.level-1,
+.blog-activity-theme-dark .legend-cell.level-1 {
+	background-color: #0e4429;
+}
+
+.blog-activity-theme-dark .heatmap-cell.level-2,
+.blog-activity-theme-dark .legend-cell.level-2 {
+	background-color: #006d32;
+}
+
+.blog-activity-theme-dark .heatmap-cell.level-3,
+.blog-activity-theme-dark .legend-cell.level-3 {
+	background-color: #26a641;
+}
+
+.blog-activity-theme-dark .heatmap-cell.level-4,
+.blog-activity-theme-dark .legend-cell.level-4 {
+	background-color: #39d353;
+}
+
 /* Responsive adjustments */
 @media (max-width: 600px) {
 	.blog-activity-stats {
