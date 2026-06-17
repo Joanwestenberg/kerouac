@@ -1,7 +1,7 @@
 {
 	"name": "obsidian-blog-activity-tracker",
 	"version": "1.0.0",
-	"description": "Track your blog publishing activity from Substack, Medium, and Ghost via RSS with a GitHub-style activity heatmap.",
+	"description": "Build a better publishing habit. See your Substack, Medium, and Ghost output as a GitHub-style heatmap, track your streaks, and keep the words flowing — all inside Obsidian.",
 	"main": "main.js",
 	"scripts": {
 		"dev": "node esbuild.config.mjs",
